@@ -1,3 +1,6 @@
+// Developed by Sasha
+// Adapted by me
+
 // C++ includes
 #include <fstream>
 #include <string>
@@ -17,27 +20,7 @@
 
 using namespace std;
 
-struct FTBFPixelEvent {
-    double xSlope;
-    double ySlope;
-    double xIntercept;
-    double yIntercept;
-    double chi2;
-    double xResidBack;
-    double yResidBack;
-    int trigger;
-    int runNumber;
-    int nPlanes;
-    int numPixels;
-    int numBackPlanes;  
-    Long64_t timestamp;
-    Long64_t bco;    
-};
-
-
 TStyle* style;
-
-
 
 int main(int argc, char **argv) {
   gROOT->SetBatch();
@@ -50,9 +33,9 @@ int main(int argc, char **argv) {
   // Parse command line arguments
   //**************************************
 
-  int numRequiredArgs = 4;
+  int numRequiredArgs = 3;
   if (argc - 1 < numRequiredArgs) {
-    std::cerr <<  "[ERROR]: Usage --> ./maketree --inputFileName=<your_caen_drs4_file.dat> --pixelInputFileName=<your_pixel_file.root> --outputFileName=<your_output_file.root> --nEvents=<number_of_events_to_be_processed>" << std::endl;
+    std::cerr <<  "[ERROR]: Usage --> ./maketree --inputFileName=<your_caen_drs4_file.dat> --outputFileName=<your_output_file.root> --nEvents=<number_of_events_to_be_processed>" << std::endl;
       return -1;
   }
   
@@ -68,16 +51,6 @@ int main(int argc, char **argv) {
       exit(0);
     }
   
-  //*****************************
-  // Getting Pixel Input FileName
-  //*****************************
-  std::string pixelInputFileName = ParseCommandLine( argc, argv, "--pixelInputFileName=" );
-  if ( pixelInputFileName == "" )
-  {
-      std::cerr << "[ERROR]: please provide a valid pixelInputFileName. Use: --pixelInputFileName=<your_pixel_file_name> " << std::endl;
-      exit(0);
-  }
-  
   //*******************************
   // Getting Output FileName (ROOT)
   //*******************************
@@ -87,7 +60,7 @@ int main(int argc, char **argv) {
       std::cerr << "[ERROR]: please provide a valid outputFileName. Use: --outputFileName=<your_output_file_name> " << std::endl;
       exit(0);
   }
-
+  
   //*****************************************
   // Getting number of events to be processed
   //*****************************************
@@ -213,12 +186,6 @@ int main(int argc, char **argv) {
   float times[2][1024]; // calibrated time
   short raw[18][1024]; // ADC counts
   float channel[18][1024]; // calibrated input (in V)
-  float xIntercept;
-  float yIntercept;
-  float xSlope;
-  float ySlope;
-  float chi2;
-  int ntracks;
  
   tree->Branch("event", &event, "event/I");
   tree->Branch("tc", tc, "tc[2]/s");
@@ -227,32 +194,8 @@ int main(int argc, char **argv) {
   }
   tree->Branch("channel", channel, "channel[18][1024]/F");
   tree->Branch("times", times, "times[2][1024]/F");
-  tree->Branch("xIntercept", &xIntercept, "xIntercept/F");
-  tree->Branch("yIntercept", &yIntercept, "yIntercept/F");
-  tree->Branch("xSlope", &xSlope, "xSlope/F");
-  tree->Branch("ySlope", &ySlope, "ySlope/F");
-  tree->Branch("chi2", &chi2, "chi2/F");
-  tree->Branch("ntracks", &ntracks, "ntracks/I");
 
-  //*************************
-  // Open Pixel Tree
-  //*************************
-  TFile *pixelDataFile = TFile::Open(pixelInputFileName.c_str(),"READ");
-  if (!pixelDataFile)
-    {
-      std::cout << "[ERROR]: Pixel file not found" << std::endl;
-      return -1;
-    }
-  TTree *pixelTree = (TTree*)pixelDataFile->Get("CMSTiming");
-  if (!pixelTree) {
-    cout << "Error: Pixel Tree not found\n";
-    return 0;
-  }
  
-  FTBFPixelEvent pixelEvent;
-  pixelTree->SetBranchAddress("event",&pixelEvent);
-
-
   // temp variables for data input
   uint   event_header;
   uint   temp[3];
@@ -273,7 +216,6 @@ int main(int argc, char **argv) {
   int maxEvents = nevents;
   if (nevents < 0) maxEvents = 999999;
 
-  int pixLastEvent=0;
 
   for( int iEvent = 0; iEvent < maxEvents; iEvent++){ 
       
@@ -408,31 +350,6 @@ int main(int argc, char **argv) {
           dummy = fread( &event_header, sizeof(uint), 1, fpin);
       }
 
-      //find corresponding pixel event    
-      xIntercept = -1e+9;
-      yIntercept = -1e+9;
-      xSlope = -999;
-      ySlope = -999;
-      chi2 = -999.;
-      ntracks = 0;
-      
-      for( int iPixelEvent = pixLastEvent; iPixelEvent < pixelTree->GetEntries(); iPixelEvent++){ 
-          pixelTree->GetEntry(iPixelEvent);
-          if (pixelEvent.trigger == iEvent) {
-              if(pixelEvent.chi2>1e-6){
-                  xIntercept = pixelEvent.xIntercept;
-                  yIntercept = pixelEvent.yIntercept;
-                  xSlope = pixelEvent.xSlope;
-                  ySlope = pixelEvent.ySlope;
-                  chi2 = pixelEvent.chi2;
-                  ntracks++;
-              }
-              pixLastEvent = iPixelEvent;
-          }else if(pixelEvent.trigger > iEvent){
-              break;
-          }
-      }        
-      
       tree->Fill();
       nGoodEvents++;
   }

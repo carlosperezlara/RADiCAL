@@ -1,0 +1,91 @@
+Thursday
+========
+
+===========================================
++ Timing DSB1-10    ====  CleanLiquid1059 +
++                                         +
++ CleanLiquid 1058  ====  RubyLiquid 882  +
+===========================================
+
+4am FIRST PHYSICS RUN
+55001-2 20k   +120GeV
+
+55004-11 1k  adjusting Vbias
+
+55016 50k   +120GeV
+
+>> Move to Electron beam: readjust the Vbias
+
+55056 25k   -30GeV
+55057 25k   -30GeV
+55058 25k   -30GeV
+55059 25k   -30GeV
+55060 25k   -30GeV
+55061 25k   -30GeV
+
+>> Night shift took complete control of beam
+
+Friday
+======
+
+55079 25k   +120GeV
+55080 25k   +120GeV
+55081 25k   +120GeV
+55082 25k   +120GeV
+
+>> 11am Cleaned SiPM changed capilary to DSB1-11
+
+55090 2k   -10GeV
+55091 2k   -10GeV
+55092 20k  -10GeV
+55093 20k  -10GeV
+
+55096 25k  -30GeV
+55097 25k  -30GeV
+55098 25k  -30GeV
+55099 25k  -30GeV
+
+55100 25k  -16GeV
+55101 25k  -16GeV
+55102 25k  -16GeV
+55103 25k  -16GeV
+
+>> 7pm take out DBS1-12; install LuAG, since posibility of run overnight
+>> Unfortunaely no overnight beam was posible
+
+
+Saturday
+========
+
+8am to 1pm: BEAM DOWN
+>> take out LuAG; install DSB1-11
+
+===========================================
++ Timing DSB1-11    ====  CleanLiquid1059 +
++                                         +
++ CleanLiquid 1058  ====  RubyLiquid 882  +
+===========================================
+
+1pm to 8pm: BEAM BACK however unstable
+
+55108 25k   -16GeV 
+
+Beam Energy Scan - EqualizedDAC: Set bias so that heights in E channels are similar
+
+55109 25k   -16GeV
+55110 25k   -25GeV
+55111 25k   -10GeV
+55112 25k   -10GeV
+
+>> Move to Ruby-Ruby-Ruby
+
+===========================================
++ Timing DSB1-10    ====  RubyLiquid      +
++                                         +
++ RubyLiquid        ====  RubyLiquid      +
+===========================================
+
+55113 20k   -20GeV
+55114 20k   -25GeV
+
+SpecialRun: left DAQ running overnight probably caught 120GeV beam from time to time
