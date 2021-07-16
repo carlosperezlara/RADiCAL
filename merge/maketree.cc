@@ -219,7 +219,7 @@ int main(int argc, char **argv) {
 
   for( int iEvent = 0; iEvent < maxEvents; iEvent++){ 
       
-      if ( iEvent % 100 == 0 ) {
+      if ( iEvent % 1000 == 0 ) {
           if (nevents >= 0) {
               std::cout << "Event " << iEvent << " of " << nevents << std::endl;
           } else {

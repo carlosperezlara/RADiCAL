@@ -1,7 +1,8 @@
 
 int readData(int run=0, Long64_t totalevents=100000, float UST_thr=1000, float threshold=270) {
   gStyle->SetOptStat(0);
-  TFile *file = new TFile(  Form("/Volumes/uva/testbeam_2021_06_data/merged/Run_%d.root",run) );
+  //TFile *file = new TFile(  Form("/Volumes/uva/testbeam_2021_06_data/merged/Run_%d.root",run) );
+  TFile *file = new TFile(  Form("Run_%d.root",run) );
   TTree *tree = (TTree*) file->Get("pulse");
 
   int event;
