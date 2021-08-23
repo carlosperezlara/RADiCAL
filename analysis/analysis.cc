@@ -9,12 +9,12 @@ int main(int argn, char **argv) {
   //int run = 46159;
   //int run = 44718;
   int run = argRun.Atoi();
-  std::cout << "Run : " << run << std::endl;
+  std::cout << "Run : " << argRun.Data() << std::endl;
 
   //TString ifile = Form("/Volumes/uva/testbeam_2021_may_copied/merged/Run_%d.root",run);
   //TString ifile = Form("Run_%d.root",run);
-  TString ifile = Form("/Volumes/uva/testbeam_2021_06_data/merged/Run_%d.root",run);
-  TString ofile = Form("AnalysisOutput_%d.root",run);
+  TString ifile = Form("/Volumes/uva/testbeam_2021_06_data/merged/Run_%s.root",argRun.Data());
+  TString ofile = Form("AnalysisOutput_%s.root",argRun.Data());
 
   testbeam *tb = new testbeam();
   tb->SetInputFileName( ifile.Data() );

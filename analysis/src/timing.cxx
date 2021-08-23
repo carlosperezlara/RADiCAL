@@ -40,10 +40,15 @@ timing::timing(TString name) {
                         Form("%s_LFb;[mV]",name.Data()),
                         100,-1000,+100000);
   fList->Add( fHisto_LFb );
+  fHisto_LFab = new TH2D(Form("%s_LFab",name.Data()),
+                         Form("%s_LFab;[mV/ns];[mV]",name.Data()),
+                         100,-1000,+1000, 100,-1000,+100000);
+  fList->Add( fHisto_LFab );
   fHisto_LFrab = new TH1D(Form("%s_LFrab",name.Data()),
                           Form("%s_fHisto_LFrab",name.Data()),
                           100,-2,+2);
   fList->Add( fHisto_LFrab );
+
 }
 //=================================
 timing::~timing() {
@@ -69,7 +74,7 @@ bool timing::Process() {
 
   SetAmplitude( rawmaxy );
   SetTime(rawmaxx);
-  
+  if(rawmaxy>fThreshold) return false;;
   fAmplitude_Thr->Fill( -fThreshold );
   double timeX;
   FindThreshold_P1( timeX, fThreshold, 1, 1);
@@ -80,7 +85,8 @@ bool timing::Process() {
   if(GetLFrab()>-0.8) return false;
   if(GetLFb()<0) return false;
   SetTime(timeX); // first order
-  
+  fHisto_LFab->Fill( GetLFa(), GetLFb() );
+
   // improving timing
 
   return true;

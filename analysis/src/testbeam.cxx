@@ -233,6 +233,7 @@ void testbeam::Process() {
   fEvents->GetXaxis()->SetBinLabel(2,"MCP passed");
   fEvents->GetXaxis()->SetBinLabel(3,"ENERGY passed");
   fEvents->GetXaxis()->SetBinLabel(4,"TIMING passed");
+  fEvents->GetXaxis()->SetBinLabel(5,"USE passed");
   DRSWAVE *ref = new DRSWAVE();
   for(;iEvent!=nEvents; ++iEvent) {
     fTree->GetEntry( iEvent );
@@ -288,7 +289,7 @@ void testbeam::Process() {
     double fintime[2];
     bool passTiming[2] = {false,false};
     for(int i=0; i!=2; ++i) {
-      fTiming[i]->SetThreshold( -100 ); // 20mV threshold
+      fTiming[i]->SetThreshold( -300 ); // 20mV threshold
       passTiming[i] =  fTiming[i]->Process();
       fintime[i] = 108.5 + fTiming[i]->GetTime() - T0;
     }
@@ -306,7 +307,8 @@ void testbeam::Process() {
     fEvents->Fill( 3 );
 
     if(amplitude[4]<10) continue;
-    
+    fEvents->Fill( 4 );
+
     fEnergyCorrelation3D->Fill( amplitude[1], amplitude[2], amplitude[3] );
     fEnergyCorrelation2D->Fill( amplitude[0], amplitude[4] );
     fTimingCorrelation2D->Fill( fintime[0], fintime[1] );

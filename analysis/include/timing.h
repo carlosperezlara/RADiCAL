@@ -28,8 +28,9 @@ private:
   TH1D *fTime_Thr;
   TH1D *fHisto_LFa;
   TH1D *fHisto_LFb;
-  TH1D *fHisto_LFc;
+  TH2D *fHisto_LFab;
   TH1D *fHisto_LFrab;
+
 };
 
 #endif
